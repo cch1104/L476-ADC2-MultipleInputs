@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd.h"
+#include "stdio.h"
+uint32_t adcResult1, adcResult2;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,8 +97,37 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  float mv1, mv2;
+  char buff[16];
+
   while (1)
   {
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 100);
+	  adcResult1=HAL_ADC_GetValue(&hadc1);
+
+
+
+	  mv1=((float)adcResult1)*3300.0/4095.0;
+	  lcd_Clear();
+	  lcd_Goto(0,0);
+//	  int mv1_int = (int)(mv1* 100);
+//	  sprintf(buff, "%d.%02d", mv1_int/100, mv1_int%100);
+	  sprintf(buff, "%7.2f", mv1);
+	  lcd_Puts(buff);
+
+	  HAL_ADC_PollForConversion(&hadc1, 100);
+	  adcResult2=HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+
+	  mv2=((float)adcResult2)*3300.0/4095.0;
+	  lcd_Goto(0,1);
+//	  int mv2_int = (int)(mv2* 100);
+//	  sprintf(buff, "%d.%02d", mv2_int/100, mv2_int%100);
+	  sprintf(buff, "%7.2f", mv2);
+	  lcd_Puts(buff);
+
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -206,7 +237,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
