@@ -99,14 +99,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   float mv1, mv2;
   char buff[16];
-
+  lcd_Init();
   while (1)
   {
 	  HAL_ADC_Start(&hadc1);
 	  HAL_ADC_PollForConversion(&hadc1, 100);
 	  adcResult1=HAL_ADC_GetValue(&hadc1);
-
-
 
 	  mv1=((float)adcResult1)*3300.0/4095.0;
 	  lcd_Clear();
@@ -126,7 +124,7 @@ int main(void)
 //	  sprintf(buff, "%d.%02d", mv2_int/100, mv2_int%100);
 	  sprintf(buff, "%7.2f", mv2);
 	  lcd_Puts(buff);
-
+//	  lcd_Puts("hello world");
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
