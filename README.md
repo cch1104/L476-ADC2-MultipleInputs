@@ -61,7 +61,7 @@ Conversion loop:
 ```c
 float mv1, mv2;
 char buff[16];
-
+lcd_Init();
 while (1)
 {
     HAL_ADC_Start(&hadc1);
